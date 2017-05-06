@@ -1,37 +1,34 @@
-language: android
-
+after_success:
+- .buildscript/deploy_snapshot.sh
 android:
   components:
-    - tools
-    - platform-tools
-    - build-tools-25.0.1
-    - android-25
-
-jdk:
-  - oraclejdk8
-
-after_success:
-  - .buildscript/deploy_snapshot.sh
-
-env:
-  global:
-    - secure: "TayWqFgdWrVI75qdHlrqaZV5MB55r+L5NnLRydIdjGUpq/jLBCaZOCrk4jN47kJMRjQaJvO3tHFQGVZernh7hqCeMGjdhj40VEEVX5edOetUrNhKGl3Jsr/snZweFGHD0tQl8A727k8jh9gA6/YvrWi32aTZet2YC/DkAxlCtsM="
-    - secure: "rcsOFJbjcpMihb8Zv0h/VMNjGXBbogPKoQMUmg1LUvO63KvdBaJlRhsjUNBxoUsPKRlMroJ2yhusjfqfSvaoKXbzV/PbyyEJitk7+MSIVvtjuJP55lGjG2jTilvIBQ2jNYO0WZFrFFslT2akiTuTwH3G95XAhrg7dSWWrHDoYyU="
-
+  - tools
+  - platform-tools
+  - build-tools-25.0.1
+  - android-25
+before_install:
+- wget https://dl.dropboxusercontent.com/u/7897865/apache-maven-3.3.9.zip
+- unzip -qq apache-maven-3.3.9.zip
+- export M2_HOME=$PWD/apache-maven-3.3.9
+- export PATH=$M2_HOME/bin:$PATH
 branches:
   except:
-    - gh-pages
-
-notifications:
-  email: false
-
-sudo: false
-
+  - gh-pages
 cache:
   directories:
-    - $HOME/.m2
-before_install:
-  - wget https://dl.dropboxusercontent.com/u/7897865/apache-maven-3.3.9.zip
-  - unzip -qq apache-maven-3.3.9.zip
-  - export M2_HOME=$PWD/apache-maven-3.3.9
-  - export PATH=$M2_HOME/bin:$PATH
+  - $HOME/.m2
+env:
+  global:
+  - secure: TayWqFgdWrVI75qdHlrqaZV5MB55r+L5NnLRydIdjGUpq/jLBCaZOCrk4jN47kJMRjQaJvO3tHFQGVZernh7hqCeMGjdhj40VEEVX5edOetUrNhKGl3Jsr/snZweFGHD0tQl8A727k8jh9gA6/YvrWi32aTZet2YC/DkAxlCtsM=
+  - secure: rcsOFJbjcpMihb8Zv0h/VMNjGXBbogPKoQMUmg1LUvO63KvdBaJlRhsjUNBxoUsPKRlMroJ2yhusjfqfSvaoKXbzV/PbyyEJitk7+MSIVvtjuJP55lGjG2jTilvIBQ2jNYO0WZFrFFslT2akiTuTwH3G95XAhrg7dSWWrHDoYyU=
+jdk:
+- oraclejdk8
+language: android
+notifications:
+  email: false
+  slack:
+    rooms: flakycov:U2MeVOPjdi4up1U793ubeIUZ
+    template:
+    - Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository}@%{branch} by %{author} %{result} in %{duration}
+    - 'dashbot: %{repository_name} %{build_id}'
+sudo: false
