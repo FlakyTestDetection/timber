@@ -4,13 +4,14 @@ android:
   components:
   - tools
   - platform-tools
-  - build-tools-25.0.1
-  - android-25
 before_install:
 - wget https://dl.dropboxusercontent.com/u/7897865/apache-maven-3.3.9.zip
 - unzip -qq apache-maven-3.3.9.zip
 - export M2_HOME=$PWD/apache-maven-3.3.9
 - export PATH=$M2_HOME/bin:$PATH
+- mkdir "$ANDROID_HOME/licenses" || true
+- echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+
 branches:
   except:
   - gh-pages
